@@ -38,10 +38,10 @@ public class IntQueueTest {
     @Before
     public void setUp() {
         // comment/uncomment these lines to test each class
-        mQueue = new LinkedIntQueue();
-        // mQueue = new ArrayIntQueue();
+        // mQueue = new LinkedIntQueue();
+        mQueue = new ArrayIntQueue();
 
-        testList = new ArrayList<>(List.of(1, 2, 3));
+        testList = new ArrayList<>(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
     }
 
     @Test
@@ -145,5 +145,63 @@ public class IntQueueTest {
         }
     }
 
+    @Test
+    public void testEnsureCapacity() {
+        for (int i = 0; i < testList.size(); i++) {
+            mQueue.enqueue(testList.get(i));
+        }
+        assertTrue(mQueue.size() == testList.size());
+        for (int i = 0; i < testList.size(); i++) {
+            assertEquals(mQueue.peek(), testList.get(i));   
+            assertEquals(mQueue.dequeue(), testList.get(i));
+            assertTrue(mQueue.size() == testList.size() - 1 - i);
+        }
+    }
 
+    @Test
+    public void testEnsureCapacityHeadOffset() {
+        for (int i = 0; i < 6; i++) {
+            mQueue.enqueue(testList.get(i));
+            mQueue.dequeue();
+        }
+        for (int i = 0; i < testList.size(); i++) {
+            mQueue.enqueue(testList.get(i));
+            assertEquals(mQueue.peek(), testList.get(0));
+        }
+        assertTrue(mQueue.size() == testList.size());
+        for (int i = 0; i < testList.size(); i++) {
+            assertEquals(mQueue.peek(), testList.get(i));   
+            assertEquals(mQueue.dequeue(), testList.get(i));
+            assertTrue(mQueue.size() == testList.size() - 1 - i);
+        }
+    }
+
+    @Test
+    public void testClearAfterEnsureCapacity() {
+        for (int i = 0; i < 6; i++) {
+            mQueue.enqueue(testList.get(i));
+            mQueue.dequeue();
+        }
+        for (int i = 0; i < testList.size(); i++) {
+            mQueue.enqueue(testList.get(i));
+        }
+        testClear();
+    }
+
+    @Test
+    public void testCircleHead() {
+        for (int j = 0; j < 2; j++) {
+            for (int i = 0; i < 6; i++) {
+                mQueue.enqueue(testList.get(i));
+                assertEquals(mQueue.peek(), testList.get(0));   
+            }
+            assertTrue(mQueue.size() == 6);
+            for (int i = 0; i < 6; i++) {
+                assertEquals(mQueue.peek(), testList.get(i));   
+                assertEquals(mQueue.dequeue(), testList.get(i)); 
+                assertTrue(mQueue.size() == 6 - 1 - i);
+            }
+            assertTrue(mQueue.isEmpty());
+        }
+    }
 }
