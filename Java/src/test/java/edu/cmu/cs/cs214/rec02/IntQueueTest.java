@@ -39,38 +39,36 @@ public class IntQueueTest {
     public void setUp() {
         // comment/uncomment these lines to test each class
         mQueue = new LinkedIntQueue();
-    //    mQueue = new ArrayIntQueue();
+        // mQueue = new ArrayIntQueue();
 
         testList = new ArrayList<>(List.of(1, 2, 3));
     }
 
     @Test
     public void testIsEmpty() {
-        // This is an example unit test
         assertTrue(mQueue.isEmpty());
     }
 
     @Test
     public void testNotEmpty() {
-        // TODO: write your own unit test
-        fail("Test not implemented");
+        mQueue.enqueue(1);
+        assertFalse(mQueue.isEmpty());
     }
 
     @Test
     public void testPeekEmptyQueue() {
-        // TODO: write your own unit test
-        fail("Test not implemented");
+        assertEquals(mQueue.peek(), null);
     }
 
     @Test
     public void testPeekNoEmptyQueue() {
-        // TODO: write your own unit test
-        fail("Test not implemented");
+        mQueue.enqueue(testList.get(0));
+        mQueue.enqueue(testList.get(1));
+        assertEquals(mQueue.peek(), testList.get(0));
     }
 
     @Test
     public void testEnqueue() {
-        // This is an example unit test
         for (int i = 0; i < testList.size(); i++) {
             mQueue.enqueue(testList.get(i));
             assertEquals(testList.get(0), mQueue.peek());
@@ -79,14 +77,56 @@ public class IntQueueTest {
     }
 
     @Test
+    public void testEmptyDequeue() {
+        assertEquals(mQueue.dequeue(), null);
+    }
+
+    @Test
     public void testDequeue() {
-        // TODO: write your own unit test
-        fail("Test not implemented");
+        for (int i = 0; i < testList.size(); i++) {
+            mQueue.enqueue(testList.get(i));
+        }
+        for (int i = 0; i < testList.size(); i++) {
+            assertEquals(mQueue.dequeue(), testList.get(i));
+            assertEquals(mQueue.size(), testList.size() - 1 - i);
+        }
+    }
+
+    @Test
+    public void testClear() {
+        mQueue.clear();
+        assertTrue(mQueue.isEmpty());
+        assertTrue(mQueue.size() == 0);
+        assertEquals(mQueue.dequeue(), null);
+        assertEquals(mQueue.peek(), null);
+    }
+
+    @Test
+    public void testContentClear() {
+        for (int i = 0; i < testList.size(); i++) {
+            mQueue.enqueue(testList.get(i));
+        }
+        testClear();
+    }
+
+    @Test
+    public void testSize() {
+        assertTrue(mQueue.size() == 0);
+        mQueue.dequeue();
+        assertTrue(mQueue.size() == 0);
+        mQueue.enqueue(1);
+        mQueue.enqueue(2);
+        assertTrue(mQueue.size() == 2);
+        mQueue.peek();
+        assertTrue(mQueue.size() == 2);
+        mQueue.dequeue();
+        assertTrue(mQueue.size() == 1);
+        mQueue.clear();
+        assertTrue(mQueue.size() == 0);
     }
 
     @Test
     public void testContent() throws IOException {
-        // This is an example unit test
         InputStream in = new FileInputStream("src/test/resources/data.txt");
         try (Scanner scanner = new Scanner(in)) {
             scanner.useDelimiter("\\s*fish\\s*");
